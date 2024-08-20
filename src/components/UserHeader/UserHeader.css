@@ -1,0 +1,17 @@
+.top-section {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .top-section:hover {
+    cursor: default;
+  }
+  
+  .top-section>* {
+    margin-top: 5px;
+  }

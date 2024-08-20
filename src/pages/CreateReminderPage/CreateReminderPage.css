@@ -1,0 +1,17 @@
+.add-reminder-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 90%;
+    gap: 1rem;
+}
+
+.date-time-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+Input {
+    text-align: center;
+}
