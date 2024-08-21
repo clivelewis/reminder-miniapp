@@ -11,6 +11,7 @@ import ViewReminderPage from './pages/ViewReminderPage/ViewReminderPage.tsx'
 
 WebApp.expand()
 WebApp.SettingsButton.hide()
+WebApp.enableClosingConfirmation()
 WebApp.ready()
 
 const router = createBrowserRouter([
