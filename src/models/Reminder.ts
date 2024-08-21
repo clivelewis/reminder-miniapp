@@ -4,7 +4,7 @@ export enum Type {
     REPEATING
 }
 
-export type Reminder = {
+export interface Reminder {
     id: string;
     text: string;
     type: Type;
