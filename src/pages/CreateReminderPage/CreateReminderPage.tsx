@@ -34,11 +34,14 @@ const CreateReminderPage = () => {
         Array.isArray(value) ? setSelectedDays(value) : setSelectedDays([])
     };
 
-    const isValidInput = (): boolean => !!(reminderText && selectedDays.length > 0 && selectedTime);
-    const anyInputPresent = (): boolean => !!(reminderText || selectedDays.length > 0 || selectedTime);
+    const isValidInput = (): boolean => {
+        return !!(reminderText && reminderText.trim().length > 0 && selectedDays.length > 0 && selectedTime)
+    }
+
+    const anyInputPresent = (): boolean => !!(reminderText || reminderText.trim().length > 0 || selectedDays.length > 0 || selectedTime);
 
     const saveNewReminder = () => {
-        reminderService.addRepeatingReminder(reminderText, selectedTime, selectedDays.map((value) => value.label.toString()));
+        reminderService.addRepeatingReminder(reminderText.trim(), selectedTime, selectedDays.map((value) => value.label.toString()));
         navigate('/')
     }
 
