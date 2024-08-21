@@ -1,6 +1,7 @@
-import { Avatar, Subheadline } from '@telegram-apps/telegram-ui';
+import { Subheadline } from '@telegram-apps/telegram-ui';
 import WebApp from '@twa-dev/sdk';
 import './UserHeader.css';
+import reminderDucky from '../../assets/reminder.gif'
 
 
 const getUsername = () => {
@@ -11,10 +12,7 @@ const UserHeader = () => {
     return (
         <div className="top-section">
             <Subheadline>@{getUsername()}</Subheadline>
-            <Avatar
-                size={96}
-                src="https://avatars.githubusercontent.com/u/48330543?v=4"
-            />
+            <img width="96px" src={reminderDucky} />
         </div>
     )
 };
