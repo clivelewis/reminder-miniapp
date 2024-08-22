@@ -11,6 +11,10 @@ import { Reminder } from "../../models/Reminder";
 export class CloudStorageClient implements ReminderStorageClient {
     private static readonly KEY_PREFIX = "rem_";
 
+    constructor() {
+        console.log('Initializing WebApp Reminder Storage Client')
+    }
+    
     /**
      * Retrieves all reminders from cloud storage.
      * @returns Promise that resolves with an array of Reminder objects.

@@ -1,5 +1,6 @@
 import { Reminder, Type } from "../models/Reminder";
 import { CloudStorageClient } from "./client/CloudStorageClient";
+import { ReminderApiClient } from "./client/ReminderApiClient";
 import { ReminderStorageClient } from "./client/ReminderStorageClient";
 
 type Subscriber = (reminders: Reminder[]) => void;
@@ -10,9 +11,16 @@ class ReminderService {
     private reminders: Reminder[] = [];
     private subscribers: Subscriber[] = [];
 
-    private apiClient: ReminderStorageClient = new CloudStorageClient();
+    private storageClient: ReminderStorageClient;
 
     constructor() {
+        
+        if (import.meta.env.VITE_STORAGE_TYPE === 'api') {
+            this.storageClient = new ReminderApiClient();
+        } else {
+            this.storageClient = new CloudStorageClient();
+        }
+
         this.fetchReminders();
     }
 
@@ -53,11 +61,11 @@ class ReminderService {
     }
 
     public removeReminder(id: string): void {
-        this.apiClient.deleteReminder(id).then(() => this.fetchReminders());
+        this.storageClient.deleteReminder(id).then(() => this.fetchReminders());
     }
 
     private fetchReminders(): void {
-        this.apiClient.getReminders().then(reminders => {
+        this.storageClient.getReminders().then(reminders => {
             this.reminders = reminders;
             this.notifySubscribers();
         });
@@ -66,7 +74,7 @@ class ReminderService {
 
 
     private addReminder(reminder: Reminder): void {
-        this.apiClient.saveReminder(reminder).then((response) => this.fetchReminders())
+        this.storageClient.saveReminder(reminder).then((response) => this.fetchReminders())
     }
 
     private notifySubscribers(): void {

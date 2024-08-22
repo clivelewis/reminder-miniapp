@@ -1,14 +1,13 @@
-import { Button, Divider, Input, Multiselect, Text } from "@telegram-apps/telegram-ui";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Select, { ActionMeta, MultiValue, StylesConfig } from 'react-select';
-import makeAnimated from 'react-select/animated';
-import 'react-time-picker/dist/TimePicker.css';
-import UserHeader from "../../components/UserHeader/UserHeader";
-import './CreateReminderPage.css';
-import reminderService from "../../services/ReminderService";
+import { Button, Divider, Input, Text } from "@telegram-apps/telegram-ui";
 import { MultiselectOption } from "@telegram-apps/telegram-ui/dist/components/Form/Multiselect/types";
 import WebApp from "@twa-dev/sdk";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Select, { StylesConfig } from 'react-select';
+import makeAnimated from 'react-select/animated';
+import UserHeader from "../../components/UserHeader/UserHeader";
+import reminderService from "../../services/ReminderService";
+import './CreateReminderPage.css';
 
 
 const options: MultiselectOption[] = [
@@ -54,7 +53,6 @@ const CreateReminderPage = () => {
             navigate('/')
         }
     }
-
 
     return (
         <>
@@ -114,7 +112,7 @@ function selectStyleConfig(): StylesConfig {
             fontWeight: 'var(--tgui--font_weight--accent2)',
             fontSize: 'var(--tgui--subheadline2--font_size)'
         })
-        
+
     }
 }
 
