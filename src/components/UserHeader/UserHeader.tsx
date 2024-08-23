@@ -12,7 +12,7 @@ const UserHeader = () => {
     return (
         <div className="top-section">
             <Subheadline>@{getUsername()}</Subheadline>
-            <img width="96px" src={reminderDucky} />
+            <img width="70px" src={reminderDucky} />
         </div>
     )
 };
