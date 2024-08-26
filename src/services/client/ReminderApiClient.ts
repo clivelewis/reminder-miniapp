@@ -1,4 +1,6 @@
-import { Reminder } from "../../models/Reminder";
+import { OneTimeReminder } from "../../models/OneTimeReminder";
+import { Reminder, ReminderType } from "../../models/Reminder";
+import { RepeatingReminder } from "../../models/RepeatingReminder";
 import { ReminderStorageClient } from "./ReminderStorageClient";
 
 export class ReminderApiClient implements ReminderStorageClient {
@@ -14,14 +16,23 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         try {
             const response = await fetch(`${this.baseUrl}/reminders`);
-            const reminders: Reminder[] = await response.json(); // No need to parse again
-            console.log(reminders);
-            return reminders; // Return the fetched reminders
+            const data = await response.json(); // No need to parse again
+
+            const reminders: Reminder[] = data.map((item: any) => {
+                if (item.type === ReminderType.ONE_TIME) {
+                    return new OneTimeReminder(item.id, item.text, item.date, item.time);
+                } else if (item.type === ReminderType.REPEATING) {
+                    return new RepeatingReminder(item.id, item.text, item.days, item.time);
+                }
+                return null;
+            }).filter((item: any): item is Reminder => item !== null);
+
+            return reminders;
         } catch (error) {
             console.error('Error fetching reminders:', error);
             return []; // Return an empty array in case of an error
         }
-    
+
     }
 
     public async getReminder(id: string): Promise<Reminder | null> {

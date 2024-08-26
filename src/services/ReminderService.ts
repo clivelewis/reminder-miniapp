@@ -1,4 +1,6 @@
-import { Reminder, Type } from "../models/Reminder";
+import { OneTimeReminder } from "../models/OneTimeReminder";
+import { Reminder } from "../models/Reminder";
+import { RepeatingReminder } from "../models/RepeatingReminder";
 import { CloudStorageClient } from "./client/CloudStorageClient";
 import { ReminderApiClient } from "./client/ReminderApiClient";
 import { ReminderStorageClient } from "./client/ReminderStorageClient";
@@ -14,7 +16,7 @@ class ReminderService {
     private storageClient: ReminderStorageClient;
 
     constructor() {
-        
+
         if (import.meta.env.VITE_STORAGE_TYPE === 'api') {
             this.storageClient = new ReminderApiClient();
         } else {
@@ -32,25 +34,13 @@ class ReminderService {
         return this.reminders.find((reminder) => reminder.id === id);
     }
 
-    public addOneTimeReminder(text: string, date: Date) {
-        this.addReminder({
-            id: crypto.randomUUID(),
-            text: text,
-            date: date,
-            type: Type.ONE_TIME
-        });
+    public addOneTimeReminder(text: string, time: string, date: string) {
+        this.addReminder(new OneTimeReminder(crypto.randomUUID(), text, date, time));
     }
 
     public addRepeatingReminder(text: string, time: string, days: string[]) {
-        this.addReminder({
-            id: crypto.randomUUID(),
-            text: text,
-            time: time,
-            days: days,
-            type: Type.REPEATING
-        });
+        this.addReminder(new RepeatingReminder(crypto.randomUUID(), text, days, time));
     }
-
 
     public subscribe(callback: Subscriber): void {
         this.subscribers.push(callback);
@@ -66,6 +56,7 @@ class ReminderService {
 
     private fetchReminders(): void {
         this.storageClient.getReminders().then(reminders => {
+            console.log(reminders);
             this.reminders = reminders;
             this.notifySubscribers();
         });

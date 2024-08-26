@@ -6,6 +6,12 @@
     gap: 1rem;
 }
 
+.select-choice-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .date-time-container {
     display: flex;
     flex-direction: column;
@@ -14,4 +20,12 @@
 
 Input {
     text-align: center;
+}
+
+input[type='date']:empty::after {
+    content: attr(placeholder);
+}
+
+input[type='date']:invalid::after {
+    content: attr(placeholder);
 }

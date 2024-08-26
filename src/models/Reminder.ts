@@ -1,14 +1,12 @@
-export enum Type {
+export enum ReminderType {
     ONE_TIME,
-    MULTI,
     REPEATING
 }
 
 export interface Reminder {
-    id: string;
-    text: string;
-    type: Type;
-    date?: Date;
-    time?: string;
-    days?: string[]
-};
+    readonly id: string;
+    readonly text: string;
+    readonly type: ReminderType;
+
+    getDescription(): string;
+}

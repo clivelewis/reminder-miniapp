@@ -14,6 +14,7 @@ const ReminderList = () => {
 
     const navigate = useNavigate()
     const [reminders, setReminders] = useState<Reminder[]>(reminderService.getReminders());
+
     useEffect(() => {
         const updateReminders = (newReminders: Reminder[]) => {
             setReminders([...newReminders]);
@@ -39,7 +40,7 @@ const ReminderList = () => {
         <div className="main-section">
 
             {reminders.map(reminder => (
-                <Section key={reminder.id + "abc"}>
+                <Section key={reminder.id}>
                     <Cell
                         onClick={() => navigate('/' + reminder.id)}
                         key={reminder.id}
@@ -50,7 +51,7 @@ const ReminderList = () => {
                         }} style={{
                             color: 'red'
                         }}><Icon16Cancel /></IconButton>}
-                        description={`Every ${reminder.days?.join(", ")} at ${reminder.time}`}
+                        description={reminder.getDescription()}
                         multiline={false}
                         title={reminder.text}
                     >

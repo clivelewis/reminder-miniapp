@@ -1,11 +1,11 @@
+import { Button, Textarea, Title } from "@telegram-apps/telegram-ui";
+import WebApp from "@twa-dev/sdk";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserHeader from "../../components/UserHeader/UserHeader";
-import WebApp from "@twa-dev/sdk";
-import { Button, FixedLayout, Textarea, Title } from "@telegram-apps/telegram-ui";
-import reminderService from "../../services/ReminderService";
-import { useEffect, useState } from "react";
 import { Reminder } from "../../models/Reminder";
-import "./ViewReminderPage.css"
+import reminderService from "../../services/ReminderService";
+import "./ViewReminderPage.css";
 
 
 const ViewReminderPage = () => {

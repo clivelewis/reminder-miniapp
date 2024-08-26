@@ -1,11 +1,11 @@
+import { IconButton, Title } from '@telegram-apps/telegram-ui';
 import '@telegram-apps/telegram-ui/dist/styles.css';
-import WebApp from '@twa-dev/sdk'
-import { Title, IconButton } from '@telegram-apps/telegram-ui';
-import plusIcon from '../../assets/AddCircle24Fill.svg'; 
-import UserHeader from '../../components/UserHeader/UserHeader';
-import ReminderList from '../../components/ReminderList/ReminderList';
+import WebApp from '@twa-dev/sdk';
 import { useNavigate } from 'react-router-dom';
-import '../../assets/AddCircle24Fill.svg'
+import '../../assets/AddCircle24Fill.svg';
+import plusIcon from '../../assets/AddCircle24Fill.svg';
+import ReminderList from '../../components/ReminderList/ReminderList';
+import UserHeader from '../../components/UserHeader/UserHeader';
 
 
 function MainPage() {
@@ -18,7 +18,7 @@ function MainPage() {
 
       <Title weight='3'>Reminders
         <IconButton mode="plain" size="m" onClick={() => navigate('/add')} title='Add reminder'>
-          <img src={plusIcon} alt="Add reminder" title="Add reminder"/>
+          <img src={plusIcon} alt="Add reminder" title="Add reminder" />
         </IconButton>
       </Title>
 

@@ -1,6 +1,8 @@
 import WebApp from "@twa-dev/sdk";
+import { OneTimeReminder } from "../../models/OneTimeReminder";
+import { Reminder, ReminderType } from "../../models/Reminder";
+import { RepeatingReminder } from "../../models/RepeatingReminder";
 import { ReminderStorageClient } from "./ReminderStorageClient";
-import { Reminder } from "../../models/Reminder";
 
 /**
  * CloudStorageClient is responsible for managing reminders in the Telegram's WebApp cloud storage.
@@ -14,7 +16,7 @@ export class CloudStorageClient implements ReminderStorageClient {
     constructor() {
         console.log('Initializing WebApp Reminder Storage Client')
     }
-    
+
     /**
      * Retrieves all reminders from cloud storage.
      * @returns Promise that resolves with an array of Reminder objects.
@@ -115,9 +117,17 @@ export class CloudStorageClient implements ReminderStorageClient {
         return new Promise((resolve, reject) => {
             WebApp.CloudStorage.getItems(keys, (error, result) => {
                 if (error || !result) return reject(error);
-                const reminders = Object.keys(result)
+                const reminders: Reminder[] = Object.keys(result)
                     .filter(key => key.startsWith(CloudStorageClient.KEY_PREFIX))
-                    .map(key => JSON.parse(result[key]));
+                    .map(key => {
+                        const item = JSON.parse(result[key])
+                        if (item.type === ReminderType.ONE_TIME) {
+                            return new OneTimeReminder(item.id, item.text, item.date, item.time);
+                        } else {
+                            return new RepeatingReminder(item.id, item.text, item.days, item.time);
+                        }
+                    });
+
                 resolve(reminders);
             });
         });
