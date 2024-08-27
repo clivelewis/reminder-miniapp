@@ -21,11 +21,3 @@
 Input {
     text-align: center;
 }
-
-input[type='date']:empty::after {
-    content: attr(placeholder);
-}
-
-input[type='date']:invalid::after {
-    content: attr(placeholder);
-}

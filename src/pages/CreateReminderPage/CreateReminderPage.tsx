@@ -25,18 +25,17 @@ const animatedComponents = makeAnimated();
 
 const CreateReminderPage = () => {
     const navigate = useNavigate();
-    const [reminderText, setReminderText] = useState('')
+    const [reminderText, setReminderText] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date().toJSON().slice(0, 10));
-    const [selectedDays, setSelectedDays] = useState<MultiselectOption[]>([])
-    const [selectedTime, setSelectedTime] = useState("")
+    const [selectedDays, setSelectedDays] = useState<MultiselectOption[]>([]);
+    const [selectedTime, setSelectedTime] = useState("09:00");
     const [selectedReminderType, setReminderType] = useState(ReminderType.REPEATING);
 
     const handleChange = (value: unknown) => {
-        Array.isArray(value) ? setSelectedDays(value) : setSelectedDays([])
-    };
+        Array.isArray(value) ? setSelectedDays(value) : setSelectedDays([]);
+    }
 
     const isValidInput = (): boolean => {
-        console.log(selectedReminderType);
         const validTextAndTime: boolean = !!(reminderText && reminderText.trim().length > 0 && selectedTime);
 
         switch (selectedReminderType) {
@@ -45,7 +44,7 @@ const CreateReminderPage = () => {
         }
     }
 
-    const anyInputPresent = (): boolean => !!(reminderText || reminderText.trim().length > 0 || selectedDays.length > 0 || selectedTime);
+    const anyInputPresent = (): boolean => !!(reminderText || reminderText.trim().length > 0 || selectedDays.length > 0 || (selectedTime && selectedTime !== "09:00"));
 
     const saveNewReminder = () => {
 
@@ -54,7 +53,7 @@ const CreateReminderPage = () => {
             case ReminderType.REPEATING: reminderService.addRepeatingReminder(reminderText.trim(), selectedTime, selectedDays.map((value) => value.label.toString())); break;
         }
 
-        navigate('/')
+        navigate('/');
     }
 
     const onBackButtonPress = () => {
@@ -63,7 +62,7 @@ const CreateReminderPage = () => {
                 if (confirmed) navigate('/')
             })
         } else {
-            navigate('/')
+            navigate('/');
         }
     }
 
@@ -101,7 +100,7 @@ const CreateReminderPage = () => {
                 }
 
                 <Text weight="1">At</Text>
-                <Input type="time" name="time" defaultValue={selectedTime} onChange={(event) => setSelectedTime(event.target.value)} />
+                <Input type="time" name="time" required defaultValue={selectedTime} onChange={(event) => setSelectedTime(event.target.value)} />
 
                 <Divider />
 
