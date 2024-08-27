@@ -22,6 +22,7 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @returns Promise that resolves with an array of Reminder objects.
      */
     public async getReminders(): Promise<Reminder[]> {
+        console.log(`Getting all reminders from the cloud storage`);
         const keys = await this.getKeys();
         return this.loadReminders(keys.filter(key => key.startsWith(CloudStorageClient.KEY_PREFIX)));
     }
@@ -32,6 +33,7 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @returns Promise that resolves with the Reminder object or null if not found.
      */
     public getReminder(id: string): Promise<Reminder | null> {
+        console.log(`Getting reminder ${id} from the cloud storage`);
         return this.getItem(CloudStorageClient.KEY_PREFIX + id);
     }
 
@@ -41,6 +43,7 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @returns Promise that resolves when the reminder is saved.
      */
     saveReminder(reminder: Reminder): Promise<void> {
+        console.log(`Saving reminder ${reminder.id} to cloud storage`);
         return this.setItem(CloudStorageClient.KEY_PREFIX + reminder.id, reminder);
     }
 
@@ -50,7 +53,7 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @returns Promise that resolves when the reminder is deleted.
      */
     deleteReminder(id: string): Promise<void> {
-        console.log('Attempting to remove - ' + id);
+        console.log(`Removing reminder ${id} from the cloud storage`);
         return this.removeItem(CloudStorageClient.KEY_PREFIX + id);
     }
 
@@ -59,6 +62,7 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @returns Promise that resolves with an array of keys.
      */
     private getKeys(): Promise<string[]> {
+        console.log('Loading keys from cloud storage');
         return new Promise((resolve) => {
             WebApp.CloudStorage.getKeys((error, keys) => {
                 if (error || !keys) {

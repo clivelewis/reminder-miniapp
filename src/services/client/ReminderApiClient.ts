@@ -9,12 +9,13 @@ export class ReminderApiClient implements ReminderStorageClient {
 
     constructor() {
         if (this.baseUrl && this.baseUrl.endsWith("/")) this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
-        console.log('Initializing API Reminder Storage Client')
+        console.log('Initializing Reminder API Storage Client')
     }
 
     public async getReminders(): Promise<Reminder[]> {
 
         try {
+            console.log('Getting all reminders');
             const response = await fetch(`${this.baseUrl}/reminders`);
             const data = await response.json(); // No need to parse again
 
@@ -29,7 +30,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
             return reminders;
         } catch (error) {
-            console.error('Error fetching reminders:', error);
+            console.error(`Error fetching reminders: ${error}`);
             return []; // Return an empty array in case of an error
         }
 
@@ -38,6 +39,7 @@ export class ReminderApiClient implements ReminderStorageClient {
     public async getReminder(id: string): Promise<Reminder | null> {
 
         try {
+            console.log(`Getting reminder ${id}`);
             const response = await fetch(`${this.baseUrl}/reminders/${id}`)
             const reminder = await response.json()
             return reminder;
@@ -49,6 +51,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
     public async saveReminder(reminder: Reminder): Promise<void> {
 
+        console.log(`Saving reminder ${reminder.id}`);
         return await fetch(`${this.baseUrl}/reminders/`, {
             method: 'POST',
             body: JSON.stringify(reminder)
@@ -57,6 +60,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
     public async deleteReminder(id: string): Promise<void> {
 
+        console.log(`Deleting reminder ${id}`);
         return await fetch(`${this.baseUrl}/reminders/${id}`, {
             method: 'DELETE'
         }).then(response => console.log(response))

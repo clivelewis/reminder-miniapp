@@ -9,10 +9,8 @@ type Subscriber = (reminders: Reminder[]) => void;
 
 class ReminderService {
 
-
     private reminders: Reminder[] = [];
     private subscribers: Subscriber[] = [];
-
     private storageClient: ReminderStorageClient;
 
     constructor() {
@@ -35,10 +33,12 @@ class ReminderService {
     }
 
     public addOneTimeReminder(text: string, time: string, date: string) {
+        console.log(`Adding one time reminder - ${text}`);
         this.addReminder(new OneTimeReminder(crypto.randomUUID(), text, date, time));
     }
 
     public addRepeatingReminder(text: string, time: string, days: string[]) {
+        console.log(`Adding repeating reminder - ${text}`);
         this.addReminder(new RepeatingReminder(crypto.randomUUID(), text, days, time));
     }
 
@@ -51,18 +51,17 @@ class ReminderService {
     }
 
     public removeReminder(id: string): void {
+        console.log(`Removing reminder ${id}`)
         this.storageClient.deleteReminder(id).then(() => this.fetchReminders());
     }
 
     private fetchReminders(): void {
+        console.log('Fetching reminders');
         this.storageClient.getReminders().then(reminders => {
-            console.log(reminders);
             this.reminders = reminders;
             this.notifySubscribers();
         });
     }
-
-
 
     private addReminder(reminder: Reminder): void {
         this.storageClient.saveReminder(reminder).then((response) => this.fetchReminders())
