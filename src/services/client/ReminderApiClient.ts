@@ -21,9 +21,9 @@ export class ReminderApiClient implements ReminderStorageClient {
 
             const reminders: Reminder[] = data.map((item: any) => {
                 if (item.type === ReminderType.ONE_TIME) {
-                    return new OneTimeReminder(item.id, item.text, item.date, item.time);
+                    return new OneTimeReminder(item.id, item.timezone, item.text, item.dateString, item.date, item.time);
                 } else if (item.type === ReminderType.REPEATING) {
-                    return new RepeatingReminder(item.id, item.text, item.days, item.time);
+                    return new RepeatingReminder(item.id, item.timezone, item.text, item.days, item.time);
                 }
                 return null;
             }).filter((item: any): item is Reminder => item !== null);

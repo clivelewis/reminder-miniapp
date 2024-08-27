@@ -6,12 +6,14 @@ export class OneTimeReminder implements Reminder {
 
     constructor(
         public readonly id: string,
+        public readonly timezone: string,
         public readonly text: string,
-        public readonly date: string,
+        public readonly dateString: string,
+        public readonly date: number,
         public readonly time: string) {
     }
-    
+
     getDescription(): string {
-        return `On ${this.date} at ${this.time}`;
+        return `On ${this.dateString} at ${this.time}`;
     }
 }

@@ -126,9 +126,9 @@ export class CloudStorageClient implements ReminderStorageClient {
                     .map(key => {
                         const item = JSON.parse(result[key])
                         if (item.type === ReminderType.ONE_TIME) {
-                            return new OneTimeReminder(item.id, item.text, item.date, item.time);
+                            return new OneTimeReminder(item.id, item.timezone, item.text, item.dateString, item.date, item.time);
                         } else {
-                            return new RepeatingReminder(item.id, item.text, item.days, item.time);
+                            return new RepeatingReminder(item.id, item.timezone, item.text, item.days, item.time);
                         }
                     });
 

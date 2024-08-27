@@ -26,7 +26,8 @@ const animatedComponents = makeAnimated();
 const CreateReminderPage = () => {
     const navigate = useNavigate();
     const [reminderText, setReminderText] = useState('');
-    const [selectedDate, setSelectedDate] = useState(new Date().toJSON().slice(0, 10));
+    const [selectedDateString, setSelectedDateString] = useState(new Date().toJSON().slice(0, 10));
+    const [selectedDate, setSelectedDate] = useState(0);
     const [selectedDays, setSelectedDays] = useState<MultiselectOption[]>([]);
     const [selectedTime, setSelectedTime] = useState("09:00");
     const [selectedReminderType, setReminderType] = useState(ReminderType.REPEATING);
@@ -39,7 +40,7 @@ const CreateReminderPage = () => {
         const validTextAndTime: boolean = !!(reminderText && reminderText.trim().length > 0 && selectedTime);
 
         switch (selectedReminderType) {
-            case ReminderType.ONE_TIME: return validTextAndTime && !!(selectedDate && selectedDate.trim().length > 0);
+            case ReminderType.ONE_TIME: return validTextAndTime && !!(selectedDateString && selectedDateString.trim().length > 0);
             case ReminderType.REPEATING: return validTextAndTime && selectedDays.length > 0;
         }
     }
@@ -49,7 +50,7 @@ const CreateReminderPage = () => {
     const saveNewReminder = () => {
 
         switch (selectedReminderType) {
-            case ReminderType.ONE_TIME: reminderService.addOneTimeReminder(reminderText.trim(), selectedTime, selectedDate); break;
+            case ReminderType.ONE_TIME: reminderService.addOneTimeReminder(reminderText.trim(), selectedTime, selectedDateString, selectedDate); break;
             case ReminderType.REPEATING: reminderService.addRepeatingReminder(reminderText.trim(), selectedTime, selectedDays.map((value) => value.label.toString())); break;
         }
 
@@ -71,7 +72,7 @@ const CreateReminderPage = () => {
             <UserHeader />
             <div className="add-reminder-container">
                 <Text weight="1">Remind me to</Text>
-                <Input type="text" placeholder="Call mother..." value={reminderText} onChange={(event) => setReminderText(event.target.value)} />
+                <Input type="text" name="reminder-text" id="reminder-text" placeholder="Call mother..." value={reminderText} onChange={(event) => setReminderText(event.target.value)} />
 
                 <div className="select-choice-container">
                     <Cell before={
@@ -93,14 +94,14 @@ const CreateReminderPage = () => {
                     </Cell>
                 </div>
                 {selectedReminderType === ReminderType.REPEATING &&
-                    <Select value={selectedDays} styles={selectStyleConfig()} closeMenuOnSelect={false} components={animatedComponents} options={options} isMulti onChange={handleChange} />
+                    <Select value={selectedDays} styles={selectStyleConfig()} name="day-select" id="day-select" closeMenuOnSelect={false} components={animatedComponents} options={options} isMulti onChange={handleChange} />
                 }
                 {selectedReminderType === ReminderType.ONE_TIME &&
-                    <Input type="date" value={selectedDate} min={new Date().toJSON().slice(0, 10)} onChange={(event) => setSelectedDate(event.target.value)} />
+                    <Input type="date" name="date" id="date" value={selectedDateString} min={new Date().toJSON().slice(0, 10)} onChange={(event) => {setSelectedDateString(event.target.value); setSelectedDate(event.target.valueAsNumber)}} />
                 }
 
                 <Text weight="1">At</Text>
-                <Input type="time" name="time" required defaultValue={selectedTime} onChange={(event) => setSelectedTime(event.target.value)} />
+                <Input type="time" name="time" id="time" required defaultValue={selectedTime} onChange={(event) => setSelectedTime(event.target.value)} />
 
                 <Divider />
 

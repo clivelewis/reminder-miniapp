@@ -6,6 +6,7 @@ export class RepeatingReminder implements Reminder {
 
     constructor(
         public readonly id: string,
+        public readonly timezone: string,
         public readonly text: string,
         public readonly days: string[],
         public readonly time: string) {

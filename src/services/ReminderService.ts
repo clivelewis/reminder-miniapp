@@ -32,14 +32,14 @@ class ReminderService {
         return this.reminders.find((reminder) => reminder.id === id);
     }
 
-    public addOneTimeReminder(text: string, time: string, date: string) {
+    public addOneTimeReminder(text: string, time: string, dateString: string, date: number) {
         console.log(`Adding one time reminder - ${text}`);
-        this.addReminder(new OneTimeReminder(crypto.randomUUID(), text, date, time));
+        this.addReminder(new OneTimeReminder(crypto.randomUUID(), Intl.DateTimeFormat().resolvedOptions().timeZone, text, dateString, date, time));
     }
 
     public addRepeatingReminder(text: string, time: string, days: string[]) {
         console.log(`Adding repeating reminder - ${text}`);
-        this.addReminder(new RepeatingReminder(crypto.randomUUID(), text, days, time));
+        this.addReminder(new RepeatingReminder(crypto.randomUUID(), Intl.DateTimeFormat().resolvedOptions().timeZone, text, days, time));
     }
 
     public subscribe(callback: Subscriber): void {
