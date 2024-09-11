@@ -1,3 +1,4 @@
+import WebApp from "@twa-dev/sdk";
 import { OneTimeReminder } from "../../models/OneTimeReminder";
 import { Reminder, ReminderType } from "../../models/Reminder";
 import { RepeatingReminder } from "../../models/RepeatingReminder";
@@ -16,7 +17,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         try {
             console.log('Getting all reminders');
-            const response = await fetch(`${this.baseUrl}/reminders`);
+            const response = await fetch(`${this.baseUrl}/reminders`, { headers: this.headers() });
             const data = await response.json(); // No need to parse again
 
             const reminders: Reminder[] = data.map((item: any) => {
@@ -40,7 +41,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         try {
             console.log(`Getting reminder ${id}`);
-            const response = await fetch(`${this.baseUrl}/reminders/${id}`)
+            const response = await fetch(`${this.baseUrl}/reminders/${id}`, { headers: this.headers() });
             const reminder = await response.json()
             return reminder;
         } catch (error) {
@@ -53,6 +54,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         console.log(`Saving reminder ${reminder.id}`);
         return await fetch(`${this.baseUrl}/reminders/`, {
+            headers: this.headers(),
             method: 'POST',
             body: JSON.stringify(reminder)
         }).then();
@@ -62,7 +64,16 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         console.log(`Deleting reminder ${id}`);
         return await fetch(`${this.baseUrl}/reminders/${id}`, {
+            headers: this.headers(),
             method: 'DELETE'
         }).then(response => console.log(response))
+    }
+
+    private headers(): HeadersInit {
+
+        return {
+            'Content-Type': 'application/json',
+            'TelegramUserId': WebApp.initDataUnsafe.user?.id + '',
+        }
     }
 }
