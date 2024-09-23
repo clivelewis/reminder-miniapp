@@ -73,7 +73,7 @@ export class ReminderApiClient implements ReminderStorageClient {
 
         return {
             'Content-Type': 'application/json',
-            'TelegramUserId': WebApp.initDataUnsafe.user?.id + '',
+            'TelegramInitData': WebApp.initData
         }
     }
 }
