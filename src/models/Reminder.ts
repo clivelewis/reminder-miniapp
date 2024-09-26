@@ -1,6 +1,6 @@
 export enum ReminderType {
-    ONE_TIME,
-    REPEATING
+    ONE_TIME = "ONE_TIME",
+    REPEATING = "REPEATING"
 }
 
 export interface Reminder {
