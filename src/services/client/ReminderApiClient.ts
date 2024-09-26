@@ -3,6 +3,7 @@ import { OneTimeReminder } from "../../models/OneTimeReminder";
 import { Reminder, ReminderType } from "../../models/Reminder";
 import { RepeatingReminder } from "../../models/RepeatingReminder";
 import { ReminderStorageClient } from "./ReminderStorageClient";
+import { CreateRequest } from "../../models/requests/CreateRequest";
 
 export class ReminderApiClient implements ReminderStorageClient {
 
@@ -16,19 +17,20 @@ export class ReminderApiClient implements ReminderStorageClient {
     public async getReminders(): Promise<Reminder[]> {
 
         try {
-            console.log('Getting all reminders');
+            console.log('Fetching all reminders');
             const response = await fetch(`${this.baseUrl}/reminders`, { headers: this.headers() });
             const data = await response.json(); // No need to parse again
 
             const reminders: Reminder[] = data.map((item: any) => {
                 if (item.type === ReminderType.ONE_TIME) {
-                    return new OneTimeReminder(item.id, item.timezone, item.text, item.dateString, item.date, item.time);
+                    return OneTimeReminder.fromJSON(item)
                 } else if (item.type === ReminderType.REPEATING) {
-                    return new RepeatingReminder(item.id, item.timezone, item.text, item.days, item.time);
+                    return RepeatingReminder.fromJSON(item)
                 }
                 return null;
             }).filter((item: any): item is Reminder => item !== null);
 
+            console.log(reminders)
             return reminders;
         } catch (error) {
             console.error(`Error fetching reminders: ${error}`);
@@ -50,14 +52,16 @@ export class ReminderApiClient implements ReminderStorageClient {
         }
     }
 
-    public async saveReminder(reminder: Reminder): Promise<void> {
+    public async saveReminder(request: CreateRequest): Promise<void> {
 
-        console.log(`Saving reminder ${reminder.id}`);
-        return await fetch(`${this.baseUrl}/reminders/`, {
+        console.log(`Saving reminder ${request}`);
+
+        return await fetch(`${this.baseUrl}/reminders`, {
             headers: this.headers(),
             method: 'POST',
-            body: JSON.stringify(reminder)
+            body: JSON.stringify(request)
         }).then();
+    
     }
 
     public async deleteReminder(id: string): Promise<void> {

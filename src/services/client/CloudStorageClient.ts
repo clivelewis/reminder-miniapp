@@ -2,6 +2,9 @@ import WebApp from "@twa-dev/sdk";
 import { OneTimeReminder } from "../../models/OneTimeReminder";
 import { Reminder, ReminderType } from "../../models/Reminder";
 import { RepeatingReminder } from "../../models/RepeatingReminder";
+import { CreateOneTimeReminderRequest } from "../../models/requests/CreateOneTimeReminderRequest";
+import { CreateRepeatingReminderRequest } from "../../models/requests/CreateRepeatingReminderRequest";
+import { CreateRequest } from "../../models/requests/CreateRequest";
 import { ReminderStorageClient } from "./ReminderStorageClient";
 
 /**
@@ -9,6 +12,7 @@ import { ReminderStorageClient } from "./ReminderStorageClient";
  * It implements the ReminderClient interface to provide methods for CRUD operations.
  * (!) WebApp cloud storage supports up to 1024 keys per user, but each key can be only up to 4096 bytes long.
  * Because of this, each reminder is a separate key with 'rem_' prefix.
+ * (!!) Only for testing. This doesn't actually send reminders to your Telegram.
  */
 export class CloudStorageClient implements ReminderStorageClient {
     private static readonly KEY_PREFIX = "rem_";
@@ -42,9 +46,20 @@ export class CloudStorageClient implements ReminderStorageClient {
      * @param reminder - The Reminder object to save.
      * @returns Promise that resolves when the reminder is saved.
      */
-    saveReminder(reminder: Reminder): Promise<void> {
-        console.log(`Saving reminder ${reminder.id} to cloud storage`);
-        return this.setItem(CloudStorageClient.KEY_PREFIX + reminder.id, reminder);
+    public saveReminder(request: CreateRequest): Promise<void> {
+        var reminder: Reminder;
+
+        // Ugly way to understand what kind of request it is
+        if ('days' in request) {
+            const repReq = request as CreateRepeatingReminderRequest
+            reminder = new RepeatingReminder(crypto.randomUUID(), repReq.timezone, repReq.text, repReq.days, repReq.time)
+        } else {
+            const oneReq = request as CreateOneTimeReminderRequest
+            reminder = new OneTimeReminder(crypto.randomUUID(), oneReq.timezone, oneReq.text, oneReq.date_string, oneReq.epoch_millis, oneReq.time)
+        }
+
+        console.log(`Saving reminder ${reminder.id} to cloud storage`)
+        return this.setItem(CloudStorageClient.KEY_PREFIX + reminder.id, reminder)
     }
 
     /**
@@ -126,9 +141,9 @@ export class CloudStorageClient implements ReminderStorageClient {
                     .map(key => {
                         const item = JSON.parse(result[key])
                         if (item.type === ReminderType.ONE_TIME) {
-                            return new OneTimeReminder(item.id, item.timezone, item.text, item.dateString, item.date, item.time);
+                            return OneTimeReminder.fromJSON(item)
                         } else {
-                            return new RepeatingReminder(item.id, item.timezone, item.text, item.days, item.time);
+                            return RepeatingReminder.fromJSON(item)
                         }
                     });
 

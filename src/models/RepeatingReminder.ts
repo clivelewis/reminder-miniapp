@@ -16,4 +16,15 @@ export class RepeatingReminder implements Reminder {
         var formattedDays = this.days.length > 2 ? this.days.map(value => value.substring(0, 3)).join(", ") : this.days.join(", ");
         return `Every ${formattedDays} at ${this.time}`;
     }
+
+    public static fromJSON(data: any): RepeatingReminder {
+
+        return new RepeatingReminder(
+            data.id,
+            data.timezone,
+            data.text,
+            data.days,
+            data.time
+        )
+    }
 }

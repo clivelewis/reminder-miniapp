@@ -1,6 +1,7 @@
-import { OneTimeReminder } from "../models/OneTimeReminder";
-import { Reminder } from "../models/Reminder";
-import { RepeatingReminder } from "../models/RepeatingReminder";
+import { Reminder, ReminderType } from "../models/Reminder";
+import { CreateOneTimeReminderRequest } from "../models/requests/CreateOneTimeReminderRequest";
+import { CreateRepeatingReminderRequest } from "../models/requests/CreateRepeatingReminderRequest";
+import { CreateRequest } from "../models/requests/CreateRequest";
 import { CloudStorageClient } from "./client/CloudStorageClient";
 import { ReminderApiClient } from "./client/ReminderApiClient";
 import { ReminderStorageClient } from "./client/ReminderStorageClient";
@@ -32,22 +33,33 @@ class ReminderService {
         return this.reminders.find((reminder) => reminder.id === id);
     }
 
-    public addOneTimeReminder(text: string, time: string, dateString: string, date: number) {
-        console.log(`Adding one time reminder - ${text}`);
-        this.addReminder(new OneTimeReminder(crypto.randomUUID(), Intl.DateTimeFormat().resolvedOptions().timeZone, text, dateString, date, time));
+    public saveOneTimeReminder(text: string, time: string, dateString: string, epochMillis: number) {
+        console.log(`Saving one time reminder - ${text}`);
+
+        const request: CreateOneTimeReminderRequest = {
+            type: ReminderType.ONE_TIME,
+            text: text,
+            date_string: dateString,
+            time: time,
+            epoch_millis: epochMillis,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+
+        this.saveReminder(request);
     }
 
-    public addRepeatingReminder(text: string, time: string, days: string[]) {
-        console.log(`Adding repeating reminder - ${text}`);
-        this.addReminder(new RepeatingReminder(crypto.randomUUID(), Intl.DateTimeFormat().resolvedOptions().timeZone, text, days, time));
-    }
+    public saveRepeatingReminder(text: string, time: string, days: string[]) {
+        console.log(`Saving repeating reminder - ${text}`);
 
-    public subscribe(callback: Subscriber): void {
-        this.subscribers.push(callback);
-    }
+        const request: CreateRepeatingReminderRequest = {
+            type: ReminderType.REPEATING,
+            text: text,
+            time: time,
+            days: days,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
 
-    public unsubscribe(callback: Subscriber): void {
-        this.subscribers = this.subscribers.filter(sub => sub !== callback);
+        this.saveReminder(request);
     }
 
     public removeReminder(id: string): void {
@@ -63,8 +75,16 @@ class ReminderService {
         });
     }
 
-    private addReminder(reminder: Reminder): void {
-        this.storageClient.saveReminder(reminder).then((response) => this.fetchReminders())
+    private saveReminder(request: CreateRequest): void {
+        this.storageClient.saveReminder(request).then(() => this.fetchReminders())
+    }
+
+    public subscribe(callback: Subscriber): void {
+        this.subscribers.push(callback);
+    }
+
+    public unsubscribe(callback: Subscriber): void {
+        this.subscribers = this.subscribers.filter(sub => sub !== callback);
     }
 
     private notifySubscribers(): void {

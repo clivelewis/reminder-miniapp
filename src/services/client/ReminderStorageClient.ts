@@ -1,4 +1,5 @@
 import { Reminder } from "../../models/Reminder";
+import { CreateRequest } from "../../models/requests/CreateRequest";
 
 /**
  * ReminderClient defines the contract for managing reminders.
@@ -24,7 +25,7 @@ export interface ReminderStorageClient {
      * @param reminder - The Reminder object to save.
      * @returns A promise that resolves when the reminder has been saved.
      */
-    saveReminder(reminder: Reminder): Promise<void>;
+    saveReminder(reminder: CreateRequest): Promise<void>;
 
     /**
      * Deletes a specific reminder by its ID.
