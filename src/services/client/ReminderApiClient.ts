@@ -14,10 +14,10 @@ export class ReminderApiClient implements ReminderStorageClient {
         console.log('Initializing Reminder API Storage Client')
     }
 
-    public async getReminders(): Promise<Reminder[]> {
+        public async getReminders(): Promise<Reminder[]> {
 
         try {
-            console.log('Fetching all reminders');
+            console.log('[API] Fetching all reminders');
             const response = await fetch(`${this.baseUrl}/reminders`, { headers: this.headers() });
             const data = await response.json(); // No need to parse again
 
@@ -30,10 +30,9 @@ export class ReminderApiClient implements ReminderStorageClient {
                 return null;
             }).filter((item: any): item is Reminder => item !== null);
 
-            console.log(reminders)
             return reminders;
         } catch (error) {
-            console.error(`Error fetching reminders: ${error}`);
+            console.error(`[API] Error fetching reminders: ${error}`);
             return []; // Return an empty array in case of an error
         }
 
@@ -42,19 +41,19 @@ export class ReminderApiClient implements ReminderStorageClient {
     public async getReminder(id: string): Promise<Reminder | null> {
 
         try {
-            console.log(`Getting reminder ${id}`);
+            console.log(`[API] Getting reminder ${id}`);
             const response = await fetch(`${this.baseUrl}/reminders/${id}`, { headers: this.headers() });
             const reminder = await response.json()
             return reminder;
         } catch (error) {
-            console.error('Error fetching reminder:', error);
+            console.error('[API] Error fetching reminder:', error);
             return null;
         }
     }
 
     public async saveReminder(request: CreateRequest): Promise<void> {
 
-        console.log(`Saving reminder ${request}`);
+        console.log(`[API] Saving reminder ${request}`);
 
         return await fetch(`${this.baseUrl}/reminders`, {
             headers: this.headers(),
@@ -66,11 +65,11 @@ export class ReminderApiClient implements ReminderStorageClient {
 
     public async deleteReminder(id: string): Promise<void> {
 
-        console.log(`Deleting reminder ${id}`);
+        console.log(`[API] Deleting reminder ${id}`);
         return await fetch(`${this.baseUrl}/reminders/${id}`, {
             headers: this.headers(),
             method: 'DELETE'
-        }).then(response => console.log(response))
+        }).then()
     }
 
     private headers(): HeadersInit {

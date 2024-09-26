@@ -9,7 +9,6 @@ export class OneTimeReminder implements Reminder {
         public readonly timezone: string,
         public readonly text: string,
         public readonly date_string: string,
-        public readonly epoch_millis: number,
         public readonly time: string) {
             
     }
@@ -25,7 +24,6 @@ export class OneTimeReminder implements Reminder {
             data.timezone,
             data.text,
             data.date_string,
-            data.epoch_millis,
             data.time
         )
     }
