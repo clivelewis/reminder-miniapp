@@ -26,6 +26,18 @@ const ReminderList = () => {
         };
     }, []);
 
+    // Fetch reminders every 10 seconds when on this page
+    useEffect(() => {
+        const interval = setInterval(() => {
+          reminderService.fetchReminders()
+        }, 10000)
+    
+        // Cleanup function to clear the interval
+        return () => clearInterval(interval);
+      }, []);
+    
+    
+
     const deleteReminder = (id: string) => {
         WebApp.showConfirm("Are you sure you want to delete this reminder?", (confirmed) => {
             if (confirmed) {

@@ -67,7 +67,7 @@ class ReminderService {
         this.storageClient.deleteReminder(id).then(() => this.fetchReminders());
     }
 
-    private fetchReminders(): void {
+    public fetchReminders(): void {
         console.log('Fetching reminders');
         this.storageClient.getReminders().then(reminders => {
             this.reminders = reminders;
