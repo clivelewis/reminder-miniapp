@@ -4,16 +4,23 @@ import WebApp from '@twa-dev/sdk';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/AddCircle24Fill.svg';
 import plusIcon from '../../assets/AddCircle24Fill.svg';
+import NoTelegram from '../../components/NoTelegram/NoTelegram';
 import ReminderList from '../../components/ReminderList/ReminderList';
 import UserHeader from '../../components/UserHeader/UserHeader';
 
 
 function MainPage() {
+
+  if (typeof WebApp === 'undefined' || WebApp.initData == "") {
+    return (<NoTelegram />)
+  }
+
   const navigate = useNavigate()
   WebApp.BackButton.hide()
 
   return (
     <>
+
       <UserHeader />
 
       <Title weight='3'>Reminders
