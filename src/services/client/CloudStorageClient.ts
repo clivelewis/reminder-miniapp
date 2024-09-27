@@ -55,7 +55,7 @@ export class CloudStorageClient implements ReminderStorageClient {
             reminder = new RepeatingReminder(crypto.randomUUID(), repReq.timezone, repReq.text, repReq.days, repReq.time)
         } else {
             const oneReq = request as CreateOneTimeReminderRequest
-            reminder = new OneTimeReminder(crypto.randomUUID(), oneReq.timezone, oneReq.text, oneReq.date_string, oneReq.epoch_millis, oneReq.time)
+            reminder = new OneTimeReminder(crypto.randomUUID(), oneReq.timezone, oneReq.text, oneReq.date_string, oneReq.time)
         }
 
         console.log(`Saving reminder ${reminder.id} to cloud storage`)
