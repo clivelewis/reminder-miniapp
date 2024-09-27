@@ -19,6 +19,7 @@ The Reminder Telegram Mini App allows users to set and manage reminders through 
   - One-Time Reminder: Set a reminder for a specific date and time.
   - Repeating Reminder: Schedule reminders for specific days of the week.
 - Manage Reminders: View and delete your existing reminders easily.
+- CloudStorage: Store created reminders in a Telegram's cloud storage.
 - Dynamic Theme Colors: The app adapts to your Telegram theme colors for a seamless experience.
 - Native Date and Time Selectors: Utilizes platform-specific date and time pickers.
 
