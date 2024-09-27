@@ -72,7 +72,7 @@ const CreateReminderPage = () => {
             <UserHeader />
             <div className="add-reminder-container">
                 <Text weight="1">Remind me to</Text>
-                <Input type="text" name="reminder-text" id="reminder-text" placeholder="Call mother..." value={reminderText} onChange={(event) => setReminderText(event.target.value)} />
+                <Input type="text" name="reminder-text" id="reminder-text" placeholder="Drink more water..." value={reminderText} onChange={(event) => setReminderText(event.target.value)} />
 
                 <div className="select-choice-container">
                     <Cell before={
